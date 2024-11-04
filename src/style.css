@@ -1,0 +1,145 @@
+/* Main container and header */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .logo {
+    width: 300px; /* Ajusta el tamaño del logo según tus necesidades */
+    height: auto;
+    margin-bottom: 10px;
+  }
+  
+  .title {
+    font-size: 32px;
+    color: #333;
+    margin: 0;
+  }
+  
+  /* Content layout */
+  .content {
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    gap: 20px;
+  }
+  
+  /* Product grid layout */
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    flex: 3;
+  }
+  
+  .product-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    text-align: center;
+  }
+  
+  .product-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+  
+  .product-item button {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .product-item button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Cart styles */
+  .cart {
+    flex: 1;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    height: fit-content;
+    position: sticky;
+    top: 20px;
+    max-width: 300px;
+  }
+  
+  /* Button styling */
+  button {
+    padding: 10px 15px;
+    font-size: 16px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+    color: white;
+  }
+  
+  /* Load more button styling */
+  .load-more-btn {
+    grid-column: span 4;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    display: block;
+    margin: 20px auto;
+  }
+  
+  /* Heading styles */
+  h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  input[type="text"] {
+    font-size: 16px;
+    padding: 10px;
+    margin-bottom: 20px;
+    width: calc(100% - 20px);
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  .search-bar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .search-input {
+    width: 80%;
+    max-width: 600px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+    
