@@ -8,3 +8,5 @@ Este proyecto fue creado con React.
 - JavaScript
 - HTML
 - CSS
+
+Trabajo hasta: 4/11/2024 12:26
