@@ -9,4 +9,4 @@ Este proyecto fue creado con React.
 - HTML
 - CSS
 
-Trabajo hasta: 4/11/2024 12:26
+Trabajo hasta: 4/11/2024 20:46
