@@ -1,43 +1,77 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import '../style.css';
 
-const UserSelect = ({ onUserSelect }) => {
-  const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState('');
+const UserSelect = ({ selectedUser, setSelectedUser }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [error, setError] = useState('');
+
+  const fetchUsers = async (term) => {
+    try {
+      const response = await axios.get('https://sugarglamourstore.com/wp-json/wc/v3/customers', {
+        params: { search: term },
+        auth: {
+          username: 'ck_9ea00d774f631ac961f9ded5861577f420c6416c',
+          password: 'cs_97def9374cc1a25bed2b7089f67a965c4f4b7cce'
+        }
+      });
+      setFilteredUsers(response.data);
+      setError('');
+    } catch (err) {
+      setError('Error al obtener usuarios. Verifica las credenciales y permisos.');
+    }
+  };
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get('https://sugarglamourstore.com/wp-json/wp/v2/users', {
-          auth: {
-            username: 'ck_tu_consumer_key', // Coloca tu Consumer Key
-            password: 'cs_tu_consumer_secret' // Coloca tu Consumer Secret
-          }
-        });
-        setUsers(response.data);
-      } catch (error) {
-        console.error("Error al obtener los usuarios:", error);
-      }
-    };
+    if (searchTerm && searchTerm !== selectedUser?.name) {
+      fetchUsers(searchTerm);
+    } else {
+      setFilteredUsers([]);
+    }
+  }, [searchTerm, selectedUser?.name]);
 
-    fetchUsers();
-  }, []);
-
-  const handleUserChange = (e) => {
-    const userId = e.target.value;
-    setSelectedUser(userId);
-    onUserSelect(userId);
+  const handleUserSelect = (user) => {
+    setSelectedUser(user);
+    setSearchTerm(''); // Limpiar el campo de búsqueda después de seleccionar el usuario
+    setFilteredUsers([]); // Oculta la lista de sugerencias
   };
 
   return (
-    <div>
-      <label htmlFor="userSelect">Asignar a usuario:</label>
-      <select id="userSelect" value={selectedUser} onChange={handleUserChange}>
-        <option value="">Selecciona un usuario</option>
-        {users.map(user => (
-          <option key={user.id} value={user.id}>{user.name}</option>
-        ))}
-      </select>
+    <div className="user-select-container">
+      <label>Buscar usuario por correo:</label>
+      <input
+        type="text"
+        value={searchTerm}
+        onChange={(e) => {
+          setSearchTerm(e.target.value);
+          setSelectedUser(null); // Limpiar el usuario seleccionado si se empieza a escribir
+        }}
+        placeholder="Buscar usuarios..."
+        className="search-input"
+      />
+      {error && <p className="error-message">{error}</p>}
+
+      {/* Lista desplegable dinámica */}
+      {filteredUsers.length > 0 && (
+        <ul className="suggestions-list">
+          {filteredUsers.map((user) => (
+            <li
+              key={user.id}
+              onClick={() => handleUserSelect(user)}
+            >
+              {user.name} ({user.email})
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {/* Mostrar usuario seleccionado */}
+      {selectedUser && (
+        <div className="selected-user-display">
+          <p><strong>Usuario Seleccionado:</strong> {selectedUser.name} ({selectedUser.email})</p>
+        </div>
+      )}
     </div>
   );
 };
