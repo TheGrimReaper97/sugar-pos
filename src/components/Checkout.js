@@ -1,3 +1,4 @@
+// src/components/Checkout.js
 import React from 'react';
 
 function Checkout({ cartItems, clearCart }) {
@@ -16,8 +17,7 @@ function Checkout({ cartItems, clearCart }) {
 
   return (
     <div>
-      <h2>Confirmar Compra</h2>
-      <button onClick={handleCheckout}>Confirmar</button>
+      <button onClick={handleCheckout}>Confirmar Compra</button>
     </div>
   );
 }

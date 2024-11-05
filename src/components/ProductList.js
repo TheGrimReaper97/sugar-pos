@@ -1,5 +1,10 @@
+// src/components/ProductList.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import ProductItem from './ProductItem';
+import Cart from './Cart';
+import SearchBar from './SearchBar';
+import Header from './Header';
 import '../style.css';
 
 const ProductList = () => {
@@ -19,7 +24,7 @@ const ProductList = () => {
         },
         auth: {
           username: 'ck_9ea00d774f631ac961f9ded5861577f420c6416c', 
-          password: 'cs_97def9374cc1a25bed2b7089f67a965c4f4b7cce' 
+          password: 'cs_97def9374cc1a25bed2b7089f67a965c4f4b7cce'
         }
       });
 
@@ -62,33 +67,12 @@ const ProductList = () => {
 
   return (
     <div className="main-container">
-      <div className="header">
-        <img src="https://sugarglamourstore.com/wp-content/uploads/2020/10/LOGO-SUGAR100924-optimized.png" alt="Logo" className="logo" />
-        <h1 className="title">Sugar POS</h1>
-      </div>
-      
-      <div className="search-bar">
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={handleSearch}
-          placeholder="Buscar productos..."
-          className="search-input"
-        />
-      </div>
-
+      <Header />
+      <SearchBar searchTerm={searchTerm} onSearch={handleSearch} />
       <div className="content">
         <div className="product-grid">
           {products.map((product) => (
-            <div key={product.id} className="product-item">
-              <img
-                src={product.images[0]?.src}
-                alt={product.name}
-                style={{ width: '100px', height: '100px', objectFit: 'cover', marginBottom: '10px' }}
-              />
-              <strong>{product.name}</strong> - ${product.price}
-              <button onClick={() => addToCart(product)}>Agregar al Carrito</button>
-            </div>
+            <ProductItem key={product.id} product={product} onAddToCart={addToCart} />
           ))}
           {hasMore && (
             <button onClick={loadMoreProducts} className="load-more-btn">
@@ -96,21 +80,7 @@ const ProductList = () => {
             </button>
           )}
         </div>
-        <div className="cart">
-          <h2>Carrito de Compras</h2>
-          {cart.length === 0 ? (
-            <p>El carrito está vacío</p>
-          ) : (
-            <ul>
-              {cart.map((item, index) => (
-                <li key={index}>{item.name} - ${item.price}</li>
-              ))}
-            </ul>
-          )}
-          <p>Total: ${cart.reduce((total, item) => total + parseFloat(item.price), 0).toFixed(2)}</p>
-          <button onClick={clearCart}>Vaciar Carrito</button>
-          <button>Confirmar Compra</button>
-        </div>
+        <Cart cartItems={cart} onClearCart={clearCart} />
       </div>
     </div>
   );
