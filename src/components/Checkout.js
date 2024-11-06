@@ -1,13 +1,12 @@
+// src/components/Checkout.js
 import React, { useState } from 'react';
 import jsPDF from 'jspdf';
-import logo from '../assets/logo.png';
-import UserSelect from './UserSelect';
+import logo from '../assets/logo.png'; // Asegúrate de que esta ruta sea correcta
 import '../style.css';
 
-function Checkout({ cartItems, clearCart }) {
+const Checkout = ({ cartItems, clearCart, selectedUser }) => {
   const [branch, setBranch] = useState('San Salvador');
   const [paymentMethod, setPaymentMethod] = useState('Efectivo');
-  const [selectedUser, setSelectedUser] = useState('');
 
   const handleCheckout = () => {
     if (cartItems.length === 0) {
@@ -15,13 +14,8 @@ function Checkout({ cartItems, clearCart }) {
       return;
     }
 
-    if (!selectedUser) {
-      alert('Por favor, seleccione un usuario.');
-      return;
-    }
-
-    alert('Compra confirmada con éxito');
     generatePDF();
+    alert('Compra confirmada con éxito');
     clearCart();
   };
 
@@ -29,22 +23,25 @@ function Checkout({ cartItems, clearCart }) {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     const centerX = pageWidth / 2;
-  
-    // Agregar logo
-    const logoImg = new Image();
-    logoImg.src = logo;
+
+    // Añadir logo
     doc.addImage(logo, 'PNG', centerX - 40, 10, 80, 40);
-  
+
+    // Título y detalles de compra
     doc.setFontSize(18);
     doc.text("Factura de Compra - SugarPOS", centerX, 60, { align: "center" });
-  
-    // Agregar detalles del usuario, sucursal y método de pago
-    doc.setFontSize(12);
-    doc.text(`Usuario: ${selectedUser.name || selectedUser.email}`, centerX, 75, { align: "center" });
+    
+    // Información de usuario
+    if (selectedUser) {
+      doc.setFontSize(12);
+      doc.text(`Usuario: ${selectedUser.name} (${selectedUser.email})`, centerX, 75, { align: "center" });
+    }
+    
+    // Sucursal y método de pago
     doc.text(`Sucursal: ${branch}`, centerX, 85, { align: "center" });
     doc.text(`Método de Pago: ${paymentMethod}`, centerX, 95, { align: "center" });
-  
-    // Listar productos
+
+    // Listado de productos
     let y = 110;
     cartItems.forEach((item, index) => {
       let productText = `${index + 1}. ${item.name} - $${item.price}`;
@@ -54,19 +51,19 @@ function Checkout({ cartItems, clearCart }) {
       doc.text(productText, centerX, y, { align: "center" });
       y += 10;
     });
-  
+
     // Total y fecha
     const total = cartItems.reduce((total, item) => total + parseFloat(item.price), 0).toFixed(2);
     doc.text(`Total: $${total}`, centerX, y + 20, { align: "center" });
     doc.text(`Fecha: ${new Date().toLocaleDateString()}`, centerX, y + 30, { align: "center" });
-  
+
+    // Abrir en visor de impresión
     window.open(doc.output('bloburl'), '_blank');
   };
-  
+
   return (
-    <div className="checkout-container">
+    <div>
       <h2>Confirmar Compra</h2>
-      <UserSelect selectedUser={selectedUser} setSelectedUser={setSelectedUser} />
 
       <div className="checkout-field">
         <label>Sucursal:</label>
@@ -84,9 +81,9 @@ function Checkout({ cartItems, clearCart }) {
         </select>
       </div>
 
-      <button onClick={handleCheckout} className="checkout-button">Confirmar Compra</button>
+      <button onClick={handleCheckout} className="checkout-button">Finalizar Compra</button>
     </div>
   );
-}
+};
 
 export default Checkout;
