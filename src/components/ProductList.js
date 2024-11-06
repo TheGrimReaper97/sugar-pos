@@ -16,17 +16,35 @@ const ProductList = () => {
 
   const fetchProducts = async (term = '', pageNum = 1, isLoadMore = false) => {
     try {
-      const response = await axios.get(`https://sugarglamourstore.com/wp-json/wc/v3/products`, {
-        params: {
-          search: term,
-          per_page: 10,
-          page: pageNum,
-        },
-        auth: {
-          username: 'ck_9ea00d774f631ac961f9ded5861577f420c6416c', 
-          password: 'cs_97def9374cc1a25bed2b7089f67a965c4f4b7cce'
-        }
-      });
+      let response;
+
+      if (!isNaN(term) && term) {
+        // Búsqueda específica por SKU
+        response = await axios.get(`https://sugarglamourstore.com/wp-json/wc/v3/products`, {
+          params: {
+            sku: term,  // Usamos el parámetro `sku` para buscar por código de barras (SKU)
+            per_page: 10,
+            page: pageNum,
+          },
+          auth: {
+            username: 'ck_9ea00d774f631ac961f9ded5861577f420c6416c',
+            password: 'cs_97def9374cc1a25bed2b7089f67a965c4f4b7cce'
+          }
+        });
+      } else {
+        // Búsqueda general si no es numérico o no es un SKU
+        response = await axios.get(`https://sugarglamourstore.com/wp-json/wc/v3/products`, {
+          params: {
+            search: term,
+            per_page: 10,
+            page: pageNum,
+          },
+          auth: {
+            username: 'ck_9ea00d774f631ac961f9ded5861577f420c6416c',
+            password: 'cs_97def9374cc1a25bed2b7089f67a965c4f4b7cce'
+          }
+        });
+      }
 
       if (response.data.length > 0) {
         setProducts(prevProducts => isLoadMore ? [...prevProducts, ...response.data] : response.data);
@@ -35,7 +53,7 @@ const ProductList = () => {
         setHasMore(false);
       }
     } catch (error) {
-      console.error("Error al obtener los productos:", error);
+      console.error("Error al obtener los productos o al filtrar por SKU:", error.response ? error.response.data : error.message);
       setHasMore(false);
     }
   };

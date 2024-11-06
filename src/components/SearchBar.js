@@ -7,7 +7,7 @@ const SearchBar = ({ searchTerm, onSearch }) => (
       type="text"
       value={searchTerm}
       onChange={onSearch}
-      placeholder="Buscar productos..."
+      placeholder="Buscar productos por nombre o SKU..."
       className="search-input"
     />
   </div>
