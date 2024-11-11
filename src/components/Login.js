@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
 const WORDPRESS_API_URL = 'https://sugarglamourstore.com/wp-json/jwt-auth/v1/token';
@@ -11,6 +12,7 @@ const Login = ({ onLoginSuccess }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [recaptchaToken, setRecaptchaToken] = useState(null);
+  const navigate = useNavigate(); // Hook para manejar la navegación
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -39,7 +41,7 @@ const Login = ({ onLoginSuccess }) => {
       if (response.data && response.data.token) {
         localStorage.setItem('token', response.data.token);
         onLoginSuccess(response.data);
-        window.location.href = '/dashboard';
+        navigate('/dashboard'); // Usamos navigate para redirigir al dashboard
       } else {
         setError('Unexpected response from server. Please try again.');
       }
