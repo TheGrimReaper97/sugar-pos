@@ -1,18 +1,17 @@
-// src/components/Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { useNavigate } from 'react-router-dom';
 import './Login.css';
+import logo from '../assets/logo.png'; // Asegúrate de que el path sea correcto
 
 const WORDPRESS_API_URL = 'https://sugarglamourstore.com/wp-json/jwt-auth/v1/token';
 
 const Login = ({ onLoginSuccess }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [pin, setPin] = useState(''); // Nuevo campo para el PIN
   const [error, setError] = useState('');
   const [recaptchaToken, setRecaptchaToken] = useState(null);
-  const navigate = useNavigate(); // Hook para manejar la navegación
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -41,7 +40,7 @@ const Login = ({ onLoginSuccess }) => {
       if (response.data && response.data.token) {
         localStorage.setItem('token', response.data.token);
         onLoginSuccess(response.data);
-        navigate('/dashboard'); // Usamos navigate para redirigir al dashboard
+        window.location.href = '/dashboard';
       } else {
         setError('Unexpected response from server. Please try again.');
       }
@@ -57,6 +56,9 @@ const Login = ({ onLoginSuccess }) => {
   return (
     <div className="login-wrapper">
       <form className="login-container" onSubmit={handleLogin}>
+        <div className="logo-container">
+          <img src={logo} alt="Logo" className="login-logo" />
+        </div>
         <div className="form-group">
           <label>Username</label>
           <input
@@ -75,11 +77,22 @@ const Login = ({ onLoginSuccess }) => {
             required
           />
         </div>
+        <div className="form-group">
+          <label>PIN</label>
+          <input
+            type="password"
+            value={pin}
+            onChange={(e) => setPin(e.target.value)}
+            required
+          />
+        </div>
         <ReCAPTCHA
           sitekey="6Le3SHgqAAAAAPdoT0lyBq2THpnmCoJDfPMn-egI"
           onChange={(token) => setRecaptchaToken(token)}
         />
-        <button type="submit">Login</button>
+        <div style={{ marginTop: '20px' }}>
+          <button type="submit">Login</button>
+        </div>
         {error && <p className="error">{error}</p>}
       </form>
     </div>

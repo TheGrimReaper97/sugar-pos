@@ -42,3 +42,17 @@ body, html {
   color: red;
   font-size: 14px;
 }
+
+
+.login-logo {
+  width: 250px;  /* Puedes aumentar este valor para agrandar el logo */
+  height: auto;  /* Mantén las proporciones */
+  margin: 0 auto;
+  display: block; /* Centrará la imagen dentro del contenedor */
+}
+
+.logo-container {
+  text-align: center;
+  margin-bottom: 20px;  /* Añade más espacio debajo del logo */
+}
+
