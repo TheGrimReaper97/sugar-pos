@@ -34,7 +34,7 @@ const Checkout = ({ cartItems, clearCart, selectedUser }) => {
     // Información de usuario
     if (selectedUser) {
       doc.setFontSize(12);
-      doc.text(`Usuario: ${selectedUser.name} (${selectedUser.email})`, centerX, 75, { align: "center" });
+      doc.text(`Usuario: (${selectedUser.email})`, centerX, 75, { align: "center" });
     }
     
     // Sucursal y método de pago
