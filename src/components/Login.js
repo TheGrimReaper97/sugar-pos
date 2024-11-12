@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
 import logo from '../assets/logo.png'; // Asegúrate de que el path sea correcto
 
@@ -12,6 +13,7 @@ const Login = ({ onLoginSuccess }) => {
   const [pin, setPin] = useState(''); // Nuevo campo para el PIN
   const [error, setError] = useState('');
   const [recaptchaToken, setRecaptchaToken] = useState(null);
+  const navigate = useNavigate(); // Usar el hook useNavigate
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -40,7 +42,7 @@ const Login = ({ onLoginSuccess }) => {
       if (response.data && response.data.token) {
         localStorage.setItem('token', response.data.token);
         onLoginSuccess(response.data);
-        window.location.href = '/dashboard';
+        navigate('/dashboard'); // Navegar a la página de dashboard
       } else {
         setError('Unexpected response from server. Please try again.');
       }
